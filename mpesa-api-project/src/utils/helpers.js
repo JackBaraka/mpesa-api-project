@@ -38,5 +38,5 @@ function formatPhoneNumber(phoneNumber) {
     throw new Error('Invalid phone number format. Use 254XXXXXXXXX format');
   }
   
-    return formatted;
+    return formatted; 
   }
