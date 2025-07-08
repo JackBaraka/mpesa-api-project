@@ -1,0 +1,144 @@
+# M-Pesa API Test Requests
+# Use this file with REST Client extension in VS Code
+
+### Variables
+@baseUrl = http://localhost:3000
+@apiKey = your-api-key-here
+
+### Health Check
+GET {{baseUrl}}/
+Content-Type: application/json
+
+### M-Pesa Service Status
+GET {{baseUrl}}/api/mpesa/status
+Content-Type: application/json
+
+### M-Pesa Routes Health
+GET {{baseUrl}}/api/mpesa/health
+Content-Type: application/json
+
+### STK Push Request
+POST {{baseUrl}}/api/mpesa/stkpush
+Content-Type: application/json
+
+{
+  "phone": "254712345678",
+  "amount": 1,
+  "accountReference": "TEST001",
+  "transactionDesc": "Test payment for services"
+}
+
+### STK Push with minimum data
+POST {{baseUrl}}/api/mpesa/stkpush
+Content-Type: application/json
+
+{
+  "phone": "0712345678",
+  "amount": 10
+}
+
+### Query STK Push Status
+POST {{baseUrl}}/api/mpesa/query
+Content-Type: application/json
+
+{
+  "checkoutRequestID": "ws_CO_191220191020363925"
+}
+
+### Test Payment (Development only)
+POST {{baseUrl}}/api/mpesa/test
+Content-Type: application/json
+
+### Sample M-Pesa Callback (for testing)
+POST {{baseUrl}}/api/mpesa/callback
+Content-Type: application/json
+
+{
+  "Body": {
+    "stkCallback": {
+      "MerchantRequestID": "29115-34620561-1",
+      "CheckoutRequestID": "ws_CO_191220191020363925",
+      "ResultCode": 0,
+      "ResultDesc": "The service request is processed successfully.",
+      "CallbackMetadata": {
+        "Item": [
+          {
+            "Name": "Amount",
+            "Value": 1.00
+          },
+          {
+            "Name": "MpesaReceiptNumber",
+            "Value": "NLJ7RT61SV"
+          },
+          {
+            "Name": "TransactionDate",
+            "Value": 20191219102115
+          },
+          {
+            "Name": "PhoneNumber",
+            "Value": 254712345678
+          }
+        ]
+      }
+    }
+  }
+}
+
+### Sample Failed Payment Callback
+POST {{baseUrl}}/api/mpesa/callback
+Content-Type: application/json
+
+{
+  "Body": {
+    "stkCallback": {
+      "MerchantRequestID": "29115-34620561-1",
+      "CheckoutRequestID": "ws_CO_191220191020363925",
+      "ResultCode": 1032,
+      "ResultDesc": "Request cancelled by user"
+    }
+  }
+}
+
+### Test with different phone formats
+POST {{baseUrl}}/api/mpesa/stkpush
+Content-Type: application/json
+
+{
+  "phone": "+254712345678",
+  "amount": 5
+}
+
+### Test with local phone format
+POST {{baseUrl}}/api/mpesa/stkpush
+Content-Type: application/json
+
+{
+  "phone": "0712345678",
+  "amount": 5
+}
+
+### Test with invalid phone number
+POST {{baseUrl}}/api/mpesa/stkpush
+Content-Type: application/json
+
+{
+  "phone": "123456789",
+  "amount": 5
+}
+
+### Test with invalid amount
+POST {{baseUrl}}/api/mpesa/stkpush
+Content-Type: application/json
+
+{
+  "phone": "254712345678",
+  "amount": -5
+}
+
+### Test with missing required fields
+POST {{baseUrl}}/api/mpesa/stkpush
+Content-Type: application/json
+
+{
+  "phone": "254712345678"
+}
