@@ -65,7 +65,11 @@ class MpesaService {
       if (!phoneNumber || !amount) {
         throw new Error('Phone number and amount are required');
       }
-
+      // Support both "CustomerPayBillOnline" and "CustomerBuyGoodsOnline" (STK Push to till)
+      let transactionType = "CustomerPayBillOnline";
+      if (accountReference && accountReference.toLowerCase().includes('till')) {
+        transactionType = "CustomerBuyGoodsOnline";
+      }
       // Format phone number
       const formattedPhone = formatPhoneNumber(phoneNumber);
       
